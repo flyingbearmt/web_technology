@@ -2,9 +2,9 @@ var fetch = require('node-fetch');
 var express = require('express');
 var app = express.Router();
 
-var gglCrednkey = "AIzaSyDOK6lrRZ-TF-UzUO-zbZebcEvez6wE8Zk";
-var forecastKey = "5ae1665ee0a92bd7bd8279c1e80c8896";
-var picSearchId = "007598455208714255862:yxe0r2cmzga";
+var gglCrednkey = "";
+var forecastKey = "";
+var picSearchId = "";
 
 //  Cross-siteHTTPrequest
 app.all('*', function(req, res, next) {
