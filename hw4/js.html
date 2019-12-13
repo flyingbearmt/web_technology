@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>carjson</title>
+    <meta charset="utf-8" />
+    <style type="text/css">
+    body {
+        text-align: center;
+    }
+
+    #content {
+        margin-top: 30%;
+    }
+
+    #content b,
+    input {
+        margin: 10px;
+    }
+
+    #newbody table,
+    th,
+    td {
+        border: 1px solid black;
+    }
+    </style>
+</head>
+
+<body>
+    <div id="content">
+        <b> Enter URL for largest manufacturers by production(2017) List JSON File</b>
+        <br>
+        <input type="text" name="JSONname" id="jsoninput" />
+        <br>
+        <input type="button" name="submit" id="submit" value="submit" />
+    </div>
+</body>
+<script type="text/javascript">
+document.querySelector("#submit").onclick = buttonClick;
+
+var jsonDoc;
+var list;
+var newWindow;
+//打开一个新的窗口
+var newtable;
+
+function buttonClick() {
+    var url = document.querySelector("#jsoninput").value;
+    try {
+        if (url == null || url == "") {
+            throw "emptyline";
+        }
+        loadJSON(url);
+    } catch (e) {
+        if (e instanceof SyntaxError) {
+            errorHandle("jsonDocParse", e);
+        } else if (e instanceof DOMException) {
+            errorHandle("DOMException", url);
+        } else {
+            errorHandle(e, url);
+
+        }
+        return;
+    }
+    drawTable(list);
+
+}
+
+function loadJSON(url) {
+    var xmlhttp = new XMLHttpRequest();
+
+    xmlhttp.open("GET", url, false); //open, send, responseText are
+    xmlhttp.setRequestHeader("Access-Control-Allow-Origin", "*");
+    xmlhttp.send(); //properties of XMLHTTPRequest
+    jsonDoc = xmlhttp.responseText;
+    if (xmlhttp.status == "404") {
+        throw "Not Found";
+    }
+    list = JSON.parse(jsonDoc);
+    var data = list.Mainline.Table.Row;
+    if (data == null || typeof(data) == undefined) {
+        // for the data is empty, error handler
+        throw "tabledata";
+    }
+
+    return jsonDoc;
+}
+
+function drawTable(list) {
+    newWindow = window.open("", "", "status,height=600,width=1000")
+    var newContent = "<!DOCTYPE html><html><head><title>A New Doc</title></head>"
+    newContent += "<body><table border=\"1px solid black\"><tbody id=\"newbody\"></tbody></table>"
+    newContent += "</body></html>"
+    newWindow.document.write(newContent);
+    newtable = convertListtoTable(list);
+    newWindow.document.close();
+}
+
+function convertListtoTable(list) {
+    var tablecontent = "";
+    headertag = document.createElement("tr");
+    var table = list.Mainline.Table;
+    var tableheader = table.Header.Data;
+    var headertagsize = 0;
+    for (var i in tableheader) {
+        var cell = document.createElement("th");
+        cell.appendChild(document.createTextNode(tableheader[i]));
+        headertag.appendChild(cell);
+        headertagsize++;
+    }
+    newWindow.document.getElementById("newbody").appendChild(headertag);
+
+    var tabledatacontent;
+    var tabledata = table.Row;
+
+    for (var row in tabledata) {
+        var newRow = document.createElement("tr");
+        var rowcontent = tabledata[row];
+        for (var i in rowcontent) {
+            cell = document.createElement("td");
+            if (rowcontent[i] == null) {
+                rowcontent[i] = "";
+            }
+            switch (i) {
+                // huds
+                case "Hubs":
+                    var hubs = rowcontent[i].Hub;
+                    var hubscontent = document.createElement("ul");
+                    var index = -1;
+                    for (var j in hubs) {
+                        if (hubs[j] == null || hubs[j].trim() == "") {
+                            continue;
+                        } else {
+                            var item = document.createElement("li");
+                            item.innerHTML = hubs[j];
+                            if (index == -1) {
+                                item.style = "font-weight: bold;";
+                            }
+                            hubscontent.appendChild(item);
+                            index++;
+                        }
+                    }
+
+
+                    cell.appendChild(hubscontent);
+                    break;
+                    // wiki link
+                case "HomePage":
+                    var link = document.createElement("a");
+                    link.href = rowcontent[i];
+                    link.innerHTML = rowcontent[i];
+                    cell.appendChild(link);
+                    break;
+                    // logo image
+                case "Logo":
+                    var logo = document.createElement("img");
+                    logo.setAttribute("src", rowcontent[i]);
+                    cell.appendChild(logo);
+                    break;
+                    // others
+                default:
+                    cell.appendChild(document.createTextNode(rowcontent[i]));
+            }
+            newRow.appendChild(cell);
+        }
+        newWindow.document.getElementById("newbody").appendChild(newRow);
+    }
+    return tablecontent;
+}
+
+function errorHandle(type, detail) {
+    switch (type) {
+        case "emptyline":
+            alert("please input valid filename");
+            break;
+        case "DOMException":
+            alert(detail + ": this file not found");
+            break;
+        case "Not Found":
+            alert(detail + " " + type);
+            break;
+        case "jsonDocParse":
+            alert("this file format is wrong" + ": " + detail);
+            break;
+        case "tabledata":
+            alert("this table is empty");
+            break;
+        default:
+            alert(type);
+    }
+}
+</script>
+
+</html>
