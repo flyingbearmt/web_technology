@@ -151,9 +151,15 @@ public class DetailActivity extends AppCompatActivity {
     }
 
     private void convertdata(JSONObject response){
+        if(response == null){
+            return;
+        }
         String strByJson = "";
         try {
             strByJson= response.get("items").toString();
+            if(strByJson == null){
+                return;
+            }
         }
         catch(JSONException e){
             Log.e(DetailActivityTAG, "there is no items in custom search resumlt, please re-check! " );

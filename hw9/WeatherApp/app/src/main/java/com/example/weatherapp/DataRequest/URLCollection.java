@@ -2,7 +2,8 @@ package com.example.weatherapp.DataRequest;
 
 public class URLCollection {
     // String ip = "http://10.26.107.118";
-    String ip = "http://nodejsapp-env.muzexzf9jz.us-east-2.elasticbeanstalk.com";
+    // String ip = "http://nodejsapp-env.muzexzf9jz.us-east-2.elasticbeanstalk.com";
+    String ip ="http://NodejsApp-env.muzexzf9jz.us-east-2.elasticbeanstalk.com";
 
     /**
      * local Server static aqi
