@@ -8,9 +8,9 @@ USC\_CSCI571\_web\_technologies\_homework\_19\_fall
 
 HW3: HTML and CSS Exercise  
 HW4: JSON Exercise   
-HW6: Travel and Entertainment Search Server-side Scripting(PHP, Google API)   
+HW6: Location Based Weathe Search Server-side Scripting(PHP, Google API)   
 HW8: Ajax, JSON and Responsive Design(Node.js, Google, Twitter API, Angularjs, Bootstrap, AWS)   
-HW9: Place Search Android App   
+HW9: Weather Forcast Android App   
 <img width="200" alt="MainPage" src="hw9/Img/MainPage.jpeg">
 <br>
 <img width="200" alt="todayfragment" src="hw9/Img/todayfragment.jpeg">
